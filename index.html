@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="./bootstrap-5.3.0-dist/css/bootstrap.min.css">
+  <script src="./node_modules/axios/dist/axios.min.js"></script>
+  <title>Social Media</title>
+  <style>
+    * {
+      scroll-behavior: smooth;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    .switch-btn {
+      width: 55px;
+      height: 23px;
+      background-color: #C5CCD3;
+      border: 4px solid #BEC5CC;
+      border-radius: 30px;
+      padding: 6px;
+      position: relative;
+    }
+
+    .switch-btn label {
+      position: absolute;
+      left: 0px;
+      top: -1px;
+      width: 16px;
+      height: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f8f9;
+      border-radius: 30px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.5s;
+    }
+
+    .switch-btn-on {
+      border: 4px solid #2e3052;
+      background-color: #7635DC;
+    }
+
+    .switch-btn-on label {
+      transform: translateX(calc(55px - 25px));
+      box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<!-- style="background-color: #f0ecff;" -->
+
+<body id="top">
+  <!-- spinner -->
+  <div id="spinner" class="d-flex justify-content-center align-items-center rounded"
+    style="position: fixed; left: 0; right: 0; top: 0; bottom: 0; margin: auto auto; z-index: 9999; width: 60px; height: 60px; background-color: #33333357;">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+  <!-- spinner -->
+
+  <!-- dark Mode -->
+  <!-- <div id="mode" class="d-flex justify-content-center align-items-center rounded"
+    style="position: fixed; left: 0; right: 0; top: 0; bottom: 0; margin: auto auto; z-index: 9999;">
+
+  </div> -->
+
+  <!-- dark Mode -->
+
+  <!-- Start Modals -->
+  <!-- login modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Sing In</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="name-text" class="col-form-label">UserName:</label>
+              <input type="text" class="form-control" id="name-text">
+            </div>
+            <div class="mb-3">
+              <label for="password-text" class="col-form-label">Password:</label>
+              <input type="password" class="form-control" id="password-text">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="loginBtnClicked()">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- signup modal -->
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Sing UP</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="name-text-reg" class="col-form-label">Name:</label>
+              <input type="text" class="form-control" id="name-text-reg">
+            </div>
+            <div class="mb-3">
+              <label for="username-text-reg" class="col-form-label">Username:</label>
+              <input type="text" class="form-control" id="username-text-reg">
+            </div>
+            <div class="mb-3">
+              <label for="password-text-reg" class="col-form-label">Password:</label>
+              <input type="password" class="form-control" id="password-text-reg">
+            </div>
+
+            <div class="mb-3">
+              <label for="user-image" class="col-form-label">Add Your Image:</label>
+              <input type="file" class="form-control" id="user-image"></input>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="signupBtnClicked()">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- add post modal -->
+  <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create A New Post</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="post-text" class="col-form-label">Write Your Post:</label>
+              <textarea name="" class="form-control" id="post-text" cols="30" rows="5"></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="post-image" class="col-form-label">Add An Image:</label>
+              <input type="file" class="form-control" id="post-image"></input>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addPost()">Publish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- update post modal -->
+  <div class="modal fade" id="updatePostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Update This Post</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="update-text" class="col-form-label">Write Your Post:</label>
+              <textarea name="" class="form-control" id="update-text" cols="30" rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="update()">Update</button>
+          <input type="text" id="update_id_input" value="" hidden>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- delete post modal -->
+  <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Are You Sure ??</h1>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" onclick="deletePost()">Delete</button>
+          <input type="text" id="delete_id_input" value="" hidden>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- End Modals -->
+  <header>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary " data-bs-theme="dark" id="nav">
+      <div class="container">
+        <a class="navbar-brand mb-2 mb-lg-0" onclick="profileClicked()">
+          <img src="imgs/403017_avatar_default_head_person_unknown_icon.svg" alt=""
+            style="width: 35px; height: 35px; cursor: pointer;" class="rounded-circle " id="logo-image">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item d-flex align-items-center me-2">
+              <input type="checkbox" id="switch" />
+              <div class="switch-btn" id="switch-btn">
+                <label for="switch" class="lable" id="lable">
+                </label>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="profileClicked()" style="cursor: pointer;">Profile</a>
+            </li>
+          </ul>
+          <div id="user-name-show" class="text-white me-3 mb-lg-0 mb-3">
+
+          </div>
+          <div class="d-flex" id="nav-btns">
+            <!-- As A guest -->
+            <button id="sign-in-btn" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#loginModal"
+              type="submit">Sign In</button>
+            <button id="sign-up-btn" class="btn btn-outline-light ms-2" type="submit" data-bs-toggle="modal"
+              data-bs-target="#signupModal">Sign Up</button>
+            <!-- As A User -->
+            <button id="logout-btn" class="btn btn-outline-danger" type="submit" onclick="logout()">logout</button>
+          </div>
+
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- add post button -->
+    <div id="add-post"
+      style="z-index: 9999; display: block; width: 60px; position: fixed; top: 85vh; right: 50px; cursor: pointer; "
+      class="rounded-circle" data-bs-toggle="modal" data-bs-target="#addPostModal">
+      <img src="imgs/299068_add_sign_icon.svg" alt="" style="width: 60px;">
+    </div>
+    <!-- add post button -->
+
+
+    <!-- Up button -->
+    <a href="#top"
+      style="z-index: 9999; display: block; width: 60px; position: fixed; top: 85vh; left: 50px; cursor: pointer; "
+      class="rounded-circle">
+      <img src="imgs/1055119_arrow_up_icon.svg" alt="" style="width: 50px;">
+    </a>
+    <!-- Up button -->
+  </header>
+
+  <!-- Start alert  -->
+  <div id="alert-success">
+
+  </div>
+
+  <!-- End alert  -->
+
+  <main class=" mt-4">
+    <div class="container col-md-8 posts" id="posts">
+    </div>
+  </main>
+
+
+  <script src="main.js"></script>
+  <script src="mainLogic.js"></script>
+  <script>
+    // let u = localStorage.getItem('user');
+    // let user = JSON.parse(u)
+    // let userId = user.id
+  </script>
+</body>
+
+</html>

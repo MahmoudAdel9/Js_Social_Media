@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="./bootstrap-5.3.0-dist/css/bootstrap.min.css">
+  <script src="./node_modules/axios/dist/axios.min.js"></script>
+  <title>Social Media</title>
+  <style>
+    * {
+      scroll-behavior: smooth;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    .switch-btn {
+      width: 55px;
+      height: 23px;
+
+      background-color: #C5CCD3;
+      border: 4px solid #BEC5CC;
+      border-radius: 30px;
+      padding: 6px;
+      position: relative;
+    }
+
+    .switch-btn label {
+      position: absolute;
+      left: 0px;
+      top: -1px;
+      width: 16px;
+      height: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f8f9;
+      border-radius: 30px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.5s;
+    }
+
+    .switch-btn-on {
+      border: 4px solid #2e3052;
+      background-color: #7635DC;
+    }
+
+    .switch-btn-on label {
+      transform: translateX(calc(55px - 25px));
+      box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+
+<body id="top">
+  <!-- spinner -->
+  <div id="spinner" class="d-flex justify-content-center align-items-center rounded"
+    style="position: fixed; left: 0; right: 0; top: 0; bottom: 0; margin: auto auto; z-index: 9999; width: 60px; height: 60px; background-color: #33333357;">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+  <!-- spinner -->
+
+  <!-- Start Modals -->
+  <!-- login modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Sing In</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="name-text" class="col-form-label">UserName:</label>
+              <input type="text" class="form-control" id="name-text">
+            </div>
+            <div class="mb-3">
+              <label for="password-text" class="col-form-label">Password:</label>
+              <input type="password" class="form-control" id="password-text">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="loginBtnClicked()">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- signup modal -->
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Sing UP</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="name-text-reg" class="col-form-label">Name:</label>
+              <input type="text" class="form-control" id="name-text-reg">
+            </div>
+            <div class="mb-3">
+              <label for="username-text-reg" class="col-form-label">Username:</label>
+              <input type="text" class="form-control" id="username-text-reg">
+            </div>
+            <div class="mb-3">
+              <label for="password-text-reg" class="col-form-label">Password:</label>
+              <input type="password" class="form-control" id="password-text-reg">
+            </div>
+
+            <div class="mb-3">
+              <label for="user-image" class="col-form-label">Add Your Image:</label>
+              <input type="file" class="form-control" id="user-image"></input>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="signupBtnClicked()">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- add post modal -->
+  <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create A New Post</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="post-text" class="col-form-label">Write Your Post:</label>
+              <textarea name="" class="form-control" id="post-text" cols="30" rows="5"></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="post-image" class="col-form-label">Add An Image:</label>
+              <input type="file" class="form-control" id="post-image"></input>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addPost()">Publish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- update post modal -->
+  <div class="modal fade" id="updatePostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Update This Post</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="update-text" class="col-form-label">Write Your Post:</label>
+              <textarea name="" class="form-control" id="update-text" cols="30" rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="update()">Update</button>
+          <input type="text" id="update_id_input" value="" hidden>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- delete post modal -->
+  <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Are You Sure ??</h1>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" onclick="deletePost()">Delete</button>
+          <input type="text" id="delete_id_input" value="" hidden>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modals -->
+
+  <!-- Up button -->
+  <a href="#top"
+    style="z-index: 9999; display: block; width: 60px; position: fixed; top: 85vh; left: 50px; cursor: pointer; "
+    class="rounded-circle">
+    <img src="imgs/1055119_arrow_up_icon.svg" alt="" style="width: 50px;">
+  </a>
+  <!-- Up button -->
+  <header>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary " data-bs-theme="dark" id="nav">
+      <div class="container">
+        <a class="navbar-brand " onclick="profileClicked()">
+          <img src="imgs/403017_avatar_default_head_person_unknown_icon.svg" alt=""
+            style="cursor: pointer; width: 35px; height: 35px;" class="rounded-circle" id="logo-image">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item d-flex align-items-center me-2">
+              <input type="checkbox" id="switch" />
+              <div class="switch-btn" id="switch-btn">
+                <label for="switch" class="lable">
+                </label>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="profileClicked()" style="cursor: pointer;">Profile</a>
+            </li>
+          </ul>
+          <div id="user-name-show" class="text-white me-3 mb-lg-0 mb-3">
+
+          </div>
+          <div class="d-flex" id="nav-btns">
+            <!-- As A guest -->
+            <button id="sign-in-btn" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#loginModal"
+              type="submit">Sign In</button>
+            <button id="sign-up-btn" class="btn btn-outline-light ms-2" type="submit" data-bs-toggle="modal"
+              data-bs-target="#signupModal">Sign Up</button>
+            <!-- As A User -->
+            <button id="logout-btn" class="btn btn-outline-danger" type="submit" onclick="logout()">logout</button>
+          </div>
+
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- add post button -->
+    <div id="add-post" style="display: block; width: 60px; position: fixed; top: 85vh; right: 50px; cursor: pointer; "
+      class="rounded-circle d-none" data-bs-toggle="modal" data-bs-target="#addPostModal">
+      <img src="imgs/299068_add_sign_icon.svg" alt="" style="width: 60px; ">
+    </div>
+    <!-- add post button -->
+  </header>
+
+  <!-- Start alert  -->
+  <div id="alert-success">
+
+  </div>
+
+  <!-- End alert  -->
+
+  <main class=" mt-4">
+    <div class="container col-md-8 postDetails " id="postDetails">
+      <section class="h-100 gradient-custom-2 w-100">
+        <div class="container py-3 h-100 w-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col ">
+              <div class="card">
+                <div class="rounded-top justify-content-center text-white d-flex flex-column">
+                  <div class="mx-auto d-flex flex-column mb-2" style="width: 150px;">
+                    <img id="main-user-image" src="" alt="Generic placeholder image"
+                      class="img-fluid img-thumbnail mt-4 mb-2 " style="width: 150px; z-index: 1">
+                  </div>
+                  <div class="text-center text-body mb-3">
+                    <h5 id="main-user-name"></h5>
+                  </div>
+                </div>
+                <div class="p-4 text-center bg-body-secondary ">
+                  <div class="d-flex justify-content-center text-center py-1 gap-3 ">
+                    <div class="me-3">
+                      <p class="mb-1 h5" id="main-user-posts"></p>
+                      <p class="small text-muted mb-0">Posts</p>
+                    </div>
+                    <div class="">
+                      <p class="mb-1 h5" id="main-user-comments"></p>
+                      <p class="small text-muted mb-0">Comments</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-4">
+                  <div class="mb-5">
+                    <p class="lead fw-normal mb-1">About</p>
+                    <div class="p-4">
+                      <div class="d-flex">
+                        <b class="font-italic mb-1 me-1 text-primary">User Name :</b> <span id="main-user-name-2">
+                        </span>
+                      </div>
+                      <div class="d-flex">
+                        <b class="font-italic mb-1 me-1 text-primary">Name : </b> <span id="main-name"></span>
+                      </div>
+                      <div class="d-flex">
+                        <b class="font-italic mb-0 me-1 text-primary">Email : </b> <span id="main-user-email">
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <p class="lead fw-normal mb-0 ">Recent Posts</p>
+                  </div>
+
+                  <div class="row g-2" id="user-posts">
+                    <!-- <div class="card text-center post mb-4 shadow">
+                      <div class="card-header text-start d-flex justify-content-between">
+                        <div>
+                          <a class="me-2 " href="#" style="text-decoration: none;">
+                            <img src="${postUserimage}" alt="profile-img" style="width: 35px; height:35px"
+                              class="rounded-circle">
+                          </a>
+                          <span class="fw-medium">${post.author.username}</span>
+                        </div>
+                        <div id="editDiv">
+                          ${editBtn}
+                          ${deleteBtn}
+                        </div>
+                      </div>
+
+
+                      <div class="card-body">
+                        <h6 class="card-text text-start fw-medium mb-3 px-3">${postBody}</h6>
+                        <img src="${postImage}" alt="post-img" class="w-100 rounded border"
+                          style="max-height:630px; width:1200px">
+                      </div>
+
+                      <div class="card-footer d-flex justify-content-between">
+                        <div class="d-flex">
+                          <div class="comments" style="cursor: pointer;">
+                            <img src="./622413_chat_chatterbox_comment_bubble_message_icon.svg" alt=""
+                              style="width: 20px;" class="me-1">
+                            <span onclick="commentBtnClicked(${post.id})"> ${post.comments_count} Comments </span>
+                          </div>
+                        </div>
+                        <div>
+                          <span> ${post.created_at}</span>
+                        </div>
+
+                      </div>
+                    </div> -->
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="mainLogic.js">
+  </script>
+
+  <script>
+    // get post id from url
+    const urlParams = new URLSearchParams(window.location.search)
+    const getUserId = urlParams.get('userId')
+
+    async function getUser() {
+      let userId = getUserId
+      showSpinner(true);
+      try {
+        let image = "imgs/403017_avatar_default_head_person_unknown_icon.svg"
+        const response = await axios.get(`https://tarmeezacademy.com/api/v1/users/${userId}`);
+        document.getElementById('main-user-posts').innerHTML = response.data.data.posts_count
+        document.getElementById('main-user-comments').innerHTML = response.data.data.comments_count
+        document.getElementById('main-user-name').innerHTML = response.data.data.username
+        document.getElementById('main-user-name-2').innerHTML = response.data.data.username
+        document.getElementById('main-name').innerHTML = response.data.data.name
+        if (response.data.data.email != null) {
+          document.getElementById('main-user-email').innerHTML = response.data.data.email
+        } else {
+          document.getElementById('main-user-email').innerHTML = "There Is No Email For This User"
+        }
+        if (Object.keys(response.data.data.profile_image).length != 0) {
+          image = response.data.data.profile_image
+        }
+        document.getElementById('main-user-image').src = image
+        showSpinner(false);
+      } catch (error) {
+        console.error(error);
+        showSpinner(false);
+      }
+    }
+
+    function getUserPosts() {
+      let userId = getUserId
+      showSpinner(true);
+      axios
+        .get(`https://tarmeezacademy.com/api/v1/users/${userId}/posts`)
+        .then(function (response) {
+
+          let arrOfPosts = response.data.data;
+          for (post of arrOfPosts) {
+            // there is body ??
+            let postBody = "";
+            if (post.body != null) {
+              postBody = post.body;
+            }
+            // there is user image ?
+            let postUserimage =
+              "imgs/403017_avatar_default_head_person_unknown_icon.svg";
+            if (Object.keys(post.author.profile_image).length != 0) {
+              postUserimage = post.author.profile_image;
+            }
+
+            // there is post image ?
+            let postImage = "imgs/No_Image_Available.jpg";
+            if (Object.keys(post.image).length != 0) {
+              postImage = post.image;
+            }
+
+            document.getElementById("user-posts").innerHTML += `
+        <div class="card text-center post mb-4 shadow">
+          <div class="card-header text-start d-flex justify-content-between">
+          <div>
+          <a class="me-2 " href="#" style="text-decoration: none;">
+              <img src="${postUserimage}" alt="profile-img" style="width: 35px; height:35px" class="rounded-circle">
+            </a>
+            <span class="fw-medium">${post.author.username}</span>
+          </div>
+          <div id="editDiv" class="d-flex">
+          </div>
+          </div>
+
+
+          <div class="card-body">
+            <h6 class="card-text text-start fw-medium mb-3 px-3">${postBody}</h6>
+            <img
+              src="${postImage}"
+              alt="post-img" class="w-100 rounded border" style="max-height:630px; width:1200px">
+          </div>
+
+          <div class="card-footer d-flex justify-content-between">
+          <div class="d-flex">
+              <div class="comments" style="cursor: pointer;">
+                <img src="imgs/622413_chat_chatterbox_comment_bubble_message_icon.svg" alt="" style="width: 20px;"
+                  class="me-1">
+                <span onclick="commentBtnClicked(${post.id})"> ${post.comments_count} Comments </span>
+              </div>
+          </div>
+            <div >
+            <span> ${post.created_at}</span>
+          </div>
+
+          </div>
+      </div>
+      `;
+          }
+          showSpinner(false);
+          console.log(arrOfPosts);
+        });
+    }
+
+
+    getUser()
+    getUserPosts()
+  </script>
+</body>
+
+</html>
