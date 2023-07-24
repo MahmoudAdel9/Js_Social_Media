@@ -133,28 +133,6 @@ async function signupBtnClicked() {
     myAlert(error.response.data.message, "danger");
     showSpinner(false);
   }
-
-  // let params = {
-  //   name: name,
-  //   username: username,
-  //   password: userPassword,
-  // };
-  // axios
-  //   .post("https://tarmeezacademy.com/api/v1/register", params)
-  //   .then(function (response) {
-  //     console.log(response);
-  //     let token = response.data.token;
-  //     localStorage.setItem("token", token);
-  //     localStorage.setItem("user", JSON.stringify(response.data.user));
-  //     exitModal("signupModal");
-  //     myAlert("Registered successfully!");
-  //     btnState();
-  //     showUserName(username);
-  //   })
-  //   .catch(function (error) {
-  //     let errorMsg = error.response.data.message || "error";
-  //     myAlert(errorMsg, "danger");
-  //   });
 }
 
 function showUserName(username) {
