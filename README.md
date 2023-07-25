@@ -2,6 +2,9 @@
 
 This is a small social media website that allows users to create new accounts, login, add posts and comments, update or delete their posts, and view other users' information and posts. It also supports dark mode for better user experience.
 
+## live demo 
+https://benevolent-melba-3e6976.netlify.app/
+
 ## Technologies Used
 
 - HTML
